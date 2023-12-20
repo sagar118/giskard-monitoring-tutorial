@@ -46,6 +46,6 @@ python src/main.py
 
 ## Screenshots of the Grafana dashboard
 
-![Individual Feature Drift Metrics](./images/individual-features-grafana.png)
+![Individual Feature Drift Metrics](./images/grafana/individual-features-grafana.png)
 
-![Dataset Level & Important Features Drift Metrics](./images/dataset-&-imp-features-grafana.png)
+![Dataset Level & Important Features Drift Metrics](./images/grafana/dataset-&-imp-features-grafana.png)
