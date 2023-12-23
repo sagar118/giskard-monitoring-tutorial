@@ -1,7 +1,7 @@
 import psycopg
 
 create_table_query = """
-create table if not exists metrics (
+create table if not exists data_drift_metrics (
     timestamp timestamp,
     holiday_drift_score float,
     weathersit_drift_score float,
@@ -20,12 +20,18 @@ def prep_db():
     Ensure that the PostgreSQL database 'giskard_monitoring' is created and ready for use.
 
     """
+    # Connect to the PostgreSQL database and create the table if it does not exist
     with psycopg.connect(
         "host=localhost port=5432 user=postgres password=postgres", autocommit=True
     ) as conn:
+        # Check if the database exists
         res = conn.execute("SELECT 1 FROM pg_database WHERE datname = 'giskard_monitoring'")
+
+        # Create the database if it does not exist
         if len(res.fetchall()) == 0:
             conn.execute("CREATE DATABASE giskard_monitoring;")
+
+        # Create the table if it does not exist
         with psycopg.connect(
             "host=localhost port=5432 user=postgres password=postgres dbname=giskard_monitoring",
             autocommit=True,
@@ -34,9 +40,10 @@ def prep_db():
 
 def insert_into_db(cursor, metrics, begin_timestamp):
 
+    # Insert the metrics into the PostgreSQL database
     cursor.execute(
         """
-        INSERT INTO metrics (
+        INSERT INTO data_drift_metrics (
             timestamp,
             holiday_drift_score,
             weathersit_drift_score,
