@@ -1,18 +1,15 @@
 # Giskard + Grafana for Data Drift Monitoring
 
-In the tutorial we learnt how to use Giskard to monitor data drift. In this tutorial we'll learn how to use Grafana to visualize the results of the test suite.
+This repository contains the code for the tutorial on using Giskard and Grafana for data drift monitoring.
 
-The idea is to periodically run the test suite and store the results in a database. Then we can use Grafana to visualize the results. We'll be using the `postgres` database for this tutorial.
+## File structure
 
-## Explain the code and the file structure
-
-We'll be using docker to setup Grafana, Postgres, and Adminer. We'll be using Adminer to interact with the Postgres database.
-
-The `grafana_datasources.yaml` file contains the configuration for the Postgres database. The `grafana_dashboards.yaml` file contains the configuration for the dashboard. The `metrics.json` file contains the details of the dashboard.
-
-The `data` directory contains the raw data and the reference data. The `model` directory contains the model we trained earlier. The `src` directory contains the source code for this tutorial.
-
-We'll be using the `docker-compose.yaml` file to setup Grafana, Postgres, and Adminer. We'll be using the `db.py` file to interact with the Postgres database. The `giskard_drift_test_suites.py` file contains the test suite we created earlier. The `main.py` file contains the code to run the test suite and store the results in the database.
+- **config**: It contains the configuration files for Grafana. The `grafana_datasources.yaml` file contains the configuration for the PostgreSql database. The `grafana_dashboards.yaml` file - contains the configuration for the dashboard.
+- **dashboards**: Contains the JSON file defining our Grafana dashboard, detailing its layout, panels, and queries.
+- **data**: This is where our reference and raw data (raw_data.parquet) reside, the latter simulating our production data.
+- **model**: It contains the model we'll be using to perform the drift test on the target variable.
+- **notebook**: Contains a Jupyter notebook used for initial experiments and development.
+- **src**: It contains the source code for this tutorial. `db.py` manages database connections, `giskard_drift_test_suites.py` is for creating test suites, and `main.py` orchestrates running these tests and storing results.
 
 ## Setup Grafana, Postgres, and Adminer
 
@@ -25,14 +22,16 @@ docker-compose up -d
 To stop the containers we can run the following command:
 
 ```bash
-docker-compose stop
+docker-compose stop 
 ```
 
-Once, the containers are up and running we can access Grafana at `http://localhost:3000/` and Adminer at `http://localhost:8080/`.
+To stop and remove the containers we can run the following command:
 
-To access the Postgres database we can use the following credentials: username: `postgres`, password: `postgres`, database: `giskard_monitoring`.
+```bash
+docker-compose down
+```
 
-To access the Grafana dashboard we can use the following credentials: username: `admin`, password: `grafana`.
+Once up, we can access Grafana at `http://localhost:3000/` (login with admin/admin, and you'll be prompted to change the password), and Adminer can be accessed at `http://localhost:8080/` (system: PostgreSQL, username: postgres, password: postgres, database: giskard_monitoring).
 
 ## Run the test suite and store the results in the database
 
@@ -44,8 +43,10 @@ To run the test suite and store the results in the database we can run the follo
 python src/main.py
 ```
 
+Visualize the results in Grafana at `http://localhost:3000/`.
+
 ## Screenshots of the Grafana dashboard
 
-![Individual Feature Drift Metrics](./images/grafana/individual-features-grafana.png)
+![Individual Feature Drift Metrics](./images/individual-features-grafana.png)
 
-![Dataset Level & Important Features Drift Metrics](./images/grafana/dataset-&-imp-features-grafana.png)
+![Dataset Level & Important Features Drift Metrics](./images/dataset-&-imp-features-grafana.png)
