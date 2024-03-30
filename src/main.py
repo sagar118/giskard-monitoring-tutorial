@@ -60,7 +60,7 @@ wrapped_ref_dataset = Dataset(
     target=TARGET_COL
 )
 
-def calculate_metrics_postgresql(cursor, i):
+def compute_drift_metrics(cursor, i):
     """
     Calculate Metrics and Insert into PostgreSQL
     Calculate various metrics using the Giskard library and insert them into the PostgreSQL database.
@@ -148,7 +148,7 @@ def batch_monitoring():
     ) as conn:
         for i in range(iters):
             with conn.cursor() as cursor:
-                calculate_metrics_postgresql(cursor, i) # Calculate drift metrics and insert into PostgreSQL
+                compute_drift_metrics(cursor, i) # Calculate drift metrics and insert into PostgreSQL
 
 if __name__ == '__main__':
     batch_monitoring()
